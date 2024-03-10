@@ -6,13 +6,26 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
   stages {
-    stage('Build') {
+    stage('Test ') {
             steps {
-                echo "Building.."
                 sh '''
-                echo "doing build stuff.."
+                echo "Test Jenkins"
                 '''
             }
+    }
+    stage('Scan') {
+      steps {
+        withSonarQubeEnv(installationName: 'sq1') { 
+            sh './mvnw clean package sonar:sonar'
         }
+      }
+    }
+    stage('Finised ') {
+            steps {
+                sh '''
+                echo "Tout est OK"
+                '''
+            }
+    }
   }
 }
